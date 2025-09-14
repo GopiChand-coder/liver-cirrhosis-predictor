@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Liver Cirrhosis Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🩺 Liver Cirrhosis Predictor</h1>
+    <h3>Enter patient details below</h3>
+
+    <!-- Prediction Form (id used by script.js) -->
+    <form id="predictForm" autocomplete="off" novalidate>
+      <h2>Patient Information</h2>
+
+      <div class="form-grid">
+        <!-- Row 1 -->
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input id="age" name="age" type="number" required />
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender" required>
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="bilirubin">Bilirubin (mg/dL)</label>
+          <input id="bilirubin" name="bilirubin" type="number" step="0.1" required />
+        </div>
+
+        <!-- Row 2 -->
+        <div class="form-group">
+          <label for="albumin">Albumin (g/dL)</label>
+          <input id="albumin" name="albumin" type="number" step="0.1" required />
+        </div>
+        <div class="form-group">
+          <label for="ast">AST (U/L)</label>
+          <input id="ast" name="ast" type="number" required />
+        </div>
+        <div class="form-group">
+          <label for="alt">ALT (U/L)</label>
+          <input id="alt" name="alt" type="number" required />
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-group">
+          <label for="alp">ALP (U/L)</label>
+          <input id="alp" name="alp" type="number" required />
+        </div>
+        <div class="form-group">
+          <label for="inr">INR</label>
+          <input id="inr" name="inr" type="number" step="0.1" required />
+        </div>
+        <div class="form-group">
+          <label for="platelets">Platelets (x10⁹/L)</label>
+          <input id="platelets" name="platelets" type="number" required />
+        </div>
+
+        <!-- Row 4 -->
+        <div class="form-group">
+          <label for="hemoglobin">Hemoglobin (g/dL)</label>
+          <input id="hemoglobin" name="hemoglobin" type="number" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label for="creatinine">Creatinine (mg/dL)</label>
+          <input id="creatinine" name="creatinine" type="number" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label for="sodium">Sodium (mEq/L)</label>
+          <input id="sodium" name="sodium" type="number" step="0.1" />
+        </div>
+
+        <!-- Row 5 -->
+        <div class="form-group">
+          <label for="glucose">Glucose (mg/dL)</label>
+          <input id="glucose" name="glucose" type="number" step="0.1" />
+        </div>
+        <div class="form-group">
+          <label for="ascites">Ascites</label>
+          <select id="ascites" name="ascites">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="encephalopathy">Encephalopathy</label>
+          <select id="encephalopathy" name="encephalopathy">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="submit-row">
+        <button type="submit" id="predictBtn">Predict</button>
+        <button type="reset" class="clear-btn" id="clearBtn">Clear</button>
+      </div>
+    </form>
+
+    <!-- Prediction Result -->
+    <div id="result"></div>
+  </div>
+
+  <!-- History Section -->
+  <div class="history-section">
+    <h2>⏳ Patient History</h2>
+    <div id="history">
+      <p>Prediction results will appear here after submission.</p>
+    </div>
+  </div>
+
+  <!-- external JS -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
