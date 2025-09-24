@@ -32,6 +32,17 @@ Model: Machine Learning (Scikit-learn / Pickle model file)
 
 Deployment: Render / Heroku
 
+📸 Screenshots
+
+### 🔹 App.py code
+![Home](screenshots/result3.png)
+
+### 🔹 Prediction Result
+![Result](screenshots/result2.png)
+
+### 🔹 History Records
+![History](screenshots/result1.png)
+
 
 📌 Future Enhancements
 
