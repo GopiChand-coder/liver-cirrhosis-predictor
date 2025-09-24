@@ -1,16 +1,25 @@
 # app.py
 from flask import Flask, request, jsonify, render_template
-import joblib, numpy as np, math, datetime
+import joblib, numpy as np, math, datetime, os
 from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
+from dotenv import load_dotenv   # <-- added
+
+# --- Load environment variables from .env (only locally, Render already sets them) ---
+load_dotenv()
+
+# --- Read variables ---
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+MODEL_FILE = os.getenv("MODEL_FILE", "liver_model.pkl")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///patients.db")
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
+app.secret_key = SECRET_KEY   # <-- added secret key from env
 
-# Load trained model (ensure liver_model.pkl exists in project root)
-model = joblib.load("liver_model.pkl")
+# Load trained model (from env path instead of hardcoding)
+model = joblib.load(MODEL_FILE)
 
-# --- Database (SQLite) via SQLAlchemy ---
-DATABASE_URL = "sqlite:///patients.db"
+# --- Database (via SQLAlchemy) ---
 engine = create_engine(DATABASE_URL, echo=False, future=True)
 Base = declarative_base()
 
@@ -71,19 +80,18 @@ def predict():
         if request.is_json:
             data = request.get_json()
         else:
-            # request.form is an ImmutableMultiDict
             data = request.form.to_dict()
 
         if not isinstance(data, dict):
             data = {}
 
-        # Required fields (basic)
+        # Required fields
         required = ["age", "bilirubin", "albumin", "inr", "creatinine"]
         for r in required:
             if r not in data or data.get(r) in (None, "", "null"):
                 return jsonify({"error": f"Missing required field: {r}"}), 400
 
-        # Define feature order expected by model (use subset present in form)
+        # Feature order
         keys = ["age","gender","bilirubin","albumin","ast","alt","alp","ggt",
                 "inr","platelets","hemoglobin","wbc","prothrombin","creatinine","sodium",
                 "glucose","bun","bmi","bp_systolic","bp_diastolic","ferritin","vitd","cholesterol","alcohol",
@@ -99,7 +107,7 @@ def predict():
         except:
             pred_class = int(np.round(float(pred_class)))
 
-        # Get probability for class '1' (High Risk), robustly
+        # Probability
         prob_high = None
         if hasattr(model, "predict_proba"):
             try:
@@ -109,14 +117,13 @@ def predict():
                     idx = classes.index(1)
                     prob_high = float(proba[idx])
                 else:
-                    # fallback to last column
                     prob_high = float(proba[-1])
             except Exception:
                 prob_high = None
 
         result_text = "High Risk" if pred_class == 1 else "Low Risk"
 
-        # Child-Pugh calculation (simplified)
+        # Child-Pugh score
         bilirubin = safe_float(data.get("bilirubin"))
         albumin = safe_float(data.get("albumin"))
         inr_val = safe_float(data.get("inr"))
@@ -136,7 +143,7 @@ def predict():
         else:
             cp_class = "Child-Pugh C (Severe)"
 
-        # MELD (log-based) with safe minimums
+        # MELD
         try:
             bil_min = max(bilirubin, 1.0)
             cre_min = max(safe_float(data.get("creatinine", 1.0)), 1.0)
@@ -146,7 +153,7 @@ def predict():
         except Exception:
             meld = None
 
-        # persist into DB (safe defaults)
+        # Save patient
         session = SessionLocal()
         patient = Patient(
             age = safe_float(data.get("age")),
@@ -189,7 +196,6 @@ def predict():
             "meld_score": meld
         })
     except Exception as e:
-        # Always return JSON on exceptions (no HTML tracebacks)
         return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 @app.route("/history", methods=["GET"])
@@ -212,4 +218,6 @@ def history():
         return jsonify({"error": f"History load failed: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    # use env var PORT (Render sets it automatically) fallback 5000
+    port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=(os.getenv("FLASK_ENV")=="development"))
