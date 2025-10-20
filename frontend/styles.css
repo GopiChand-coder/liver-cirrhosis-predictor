@@ -1,0 +1,156 @@
+/* static/styles.css */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #f0f4f8, #d9edf7);
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 30px auto;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.12);
+}
+
+h1 {
+  text-align: center;
+  color: #00695c;
+  margin-bottom: 5px;
+}
+
+h3 {
+  text-align: center;
+  color: #444;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+form h2 {
+  margin-bottom: 15px;
+  color: #00695c;
+  border-bottom: 2px solid #80cbc4;
+  padding-bottom: 5px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #004d40;
+}
+
+input, select {
+  padding: 10px;
+  border: 1px solid #b2dfdb;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+input:focus, select:focus {
+  border-color: #26a69a;
+  outline: none;
+  background: #fff;
+}
+
+.submit-row {
+  margin-top: 20px;
+  text-align: center;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 5px;
+}
+
+button[type="submit"] {
+  background: #009688;
+  color: #fff;
+}
+
+button[type="submit"]:hover {
+  background: #00796b;
+}
+
+/* Style for Clear Button */
+.clear-btn {
+  background-color: #ee5045;
+  color: #fff;
+}
+
+.clear-btn:hover {
+  background-color: #ef3939;
+}
+
+.clear-btn:active {
+  background-color: #b71c1c;
+}
+
+.result-box {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: #f4f8ff;
+  border: 1px solid #cce0ff;
+}
+
+.error-box {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: #fff4f4;
+  border: 1px solid #ffcccc;
+  color: #a10000;
+}
+
+.history-section {
+  width: 90%;
+  max-width: 1100px;
+  margin: 20px auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+}
+
+.history-section h2 {
+  color: #00695c;
+}
+
+/* simple history table */
+#history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+#history-table th, #history-table td {
+  border: 1px solid #e6eef2;
+  padding: 8px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+#history-table th {
+  background: #f7fbff;
+  color: #004d40;
+}
